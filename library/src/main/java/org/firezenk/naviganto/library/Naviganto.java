@@ -118,7 +118,11 @@ public class Naviganto<C> implements INaviganto<C> {
         } else {
             history.remove(getHistoryLast());
             if (!history.isEmpty()) {
-                trackView(history.get(getHistoryLast()).route);
+                if (history.get(getHistoryLast()).viewHistory != null && !history.get(getHistoryLast()).viewHistory.isEmpty()) {
+                    trackView(history.get(getHistoryLast()).viewHistory.getFirst());
+                } else {
+                    trackView(history.get(getHistoryLast()).route);
+                }
             }
             return false;
         }

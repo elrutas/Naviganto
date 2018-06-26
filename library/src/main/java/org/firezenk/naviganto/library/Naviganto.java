@@ -214,7 +214,7 @@ public class Naviganto<C> implements INaviganto<C> {
 
     private void trackView(Route route) {
         if (VIEW_TRACKER != null) {
-            String routeName = route.clazz.getName();
+            String routeName = route.clazz.getSimpleName();
             String viewName = routeName.substring(0, routeName.lastIndexOf(RouteProcessor.CLASS_SUFFIX_ROUTE));
 
             VIEW_TRACKER.accept(viewName);

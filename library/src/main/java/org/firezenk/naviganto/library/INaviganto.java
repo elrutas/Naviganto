@@ -18,6 +18,12 @@ interface INaviganto<C> {
     void setLoggingReader(Consumer<String> loggingReader);
 
     /**
+     * Set a consumer to read the route name when there is a route change
+     * @param routeTracker custom string consumer
+     */
+    void setViewTracker(Consumer<String> routeTracker);
+
+    /**
      * Enables debug mode for all the navigation session
      * @param debugMode true or false for all the session
      * @return the instance

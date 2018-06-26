@@ -42,6 +42,7 @@ import javax.tools.Diagnostic;
 @AutoService(Processor.class)
 public class RouteProcessor extends AbstractProcessor {
 
+    public static final String CLASS_SUFFIX_ROUTE = "Route";
     private Filer filer;
     private Messager messager;
 
@@ -253,7 +254,7 @@ public class RouteProcessor extends AbstractProcessor {
 
     private TypeSpec createRoute(TypeElement typeElement, ArrayList<MethodSpec> methods) {
         messager.printMessage(Diagnostic.Kind.NOTE, "Saving route file...");
-        return TypeSpec.classBuilder(typeElement.getSimpleName() + "Route")
+        return TypeSpec.classBuilder(typeElement.getSimpleName() + CLASS_SUFFIX_ROUTE)
                 .addAnnotation(AnnotationSpec.builder(Generated.class)
                         .addMember("value", "$S", this.getClass().getName())
                         .build())

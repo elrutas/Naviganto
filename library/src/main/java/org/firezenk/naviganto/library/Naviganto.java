@@ -1,10 +1,12 @@
 package org.firezenk.naviganto.library;
 
-import javax.annotation.Nonnull;
+import org.firezenk.naviganto.processor.RouteProcessor;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import javax.annotation.Nonnull;
 
 /**
  * Project: Naviganto
@@ -15,6 +17,7 @@ import java.util.Arrays;
 public class Naviganto<C> implements INaviganto<C> {
 
     private static Consumer<String> LOGGING_READER = null;
+    private static Consumer<String> VIEW_TRACKER = null;
     private static Naviganto INSTANCE;
     private static Boolean DEBUG = Boolean.FALSE;
     private static String DEBUG_TAG = "Naviganto::";
@@ -41,7 +44,11 @@ public class Naviganto<C> implements INaviganto<C> {
     }
 
     @Override public void setLoggingReader(Consumer<String> loggingReader) {
-        LOGGING_READER=loggingReader;
+        LOGGING_READER = loggingReader;
+    }
+
+    @Override public void setViewTracker(Consumer<String> routeTracker) {
+        VIEW_TRACKER = routeTracker;
     }
 
     public Naviganto debug(boolean debugMode) {
@@ -56,6 +63,7 @@ public class Naviganto<C> implements INaviganto<C> {
 
                 log(" --->> Next");
                 log(" Navigating to: ", route);
+                trackView(route);
 
                 if (route.bundle != null) {
                     ((Routable) route.clazz.newInstance()).route(context, route.uuid, route.bundle, route.viewParent);
@@ -125,7 +133,7 @@ public class Naviganto<C> implements INaviganto<C> {
             return true;
         } catch (Exception e) {
             print("Is not possible to go back " +  times +
-                                       " times, the history length is " + history.size());
+                    " times, the history length is " + history.size());
             if (DEBUG) e.printStackTrace();
             return false;
         }
@@ -156,7 +164,7 @@ public class Naviganto<C> implements INaviganto<C> {
                 return true;
             } else {
                 print("Is not possible to go back, there is no route like: "
-                                           + route.clazz.getName());
+                        + route.clazz.getName());
                 return false;
             }
             history.remove(getHistoryLast());
@@ -201,6 +209,15 @@ public class Naviganto<C> implements INaviganto<C> {
             LOGGING_READER.accept(printMessage);
         }else {
             System.out.println(printMessage);
+        }
+    }
+
+    private void trackView(Route route) {
+        if (VIEW_TRACKER != null) {
+            String routeName = route.clazz.getName();
+            String viewName = routeName.substring(0, routeName.lastIndexOf(RouteProcessor.CLASS_SUFFIX_ROUTE));
+
+            VIEW_TRACKER.accept(viewName);
         }
     }
 

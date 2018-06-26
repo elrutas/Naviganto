@@ -117,6 +117,9 @@ public class Naviganto<C> implements INaviganto<C> {
             }
         } else {
             history.remove(getHistoryLast());
+            if (!history.isEmpty()) {
+                trackView(history.get(getHistoryLast()).route);
+            }
             return false;
         }
 
@@ -213,7 +216,7 @@ public class Naviganto<C> implements INaviganto<C> {
     }
 
     private void trackView(Route route) {
-        if (VIEW_TRACKER != null) {
+        if (VIEW_TRACKER != null && route != null) {
             String routeName = route.clazz.getSimpleName();
             String viewName = routeName.substring(0, routeName.lastIndexOf(RouteProcessor.CLASS_SUFFIX_ROUTE));
 

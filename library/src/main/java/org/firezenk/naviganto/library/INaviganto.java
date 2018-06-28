@@ -35,28 +35,28 @@ interface INaviganto<C> {
      * @param context The Android's context (required for Android)
      * @param route The target route
      */
-    <C> void routeTo(@Nonnull C context, @Nonnull Route route);
+    void routeTo(@Nonnull C context, @Nonnull Route route);
 
 
     /**
      * Navigate to the last route available on history
      * @param context The Android's context (required for Android)
      */
-    <C> void routeToLast(@Nonnull C context);
+    void routeToLast(@Nonnull C context);
 
     /**
      * Navigate to the last route available on history refreshing the viewParent
      * @param context The Android's context (required for Android)
      * @param viewParent New view parent (for view recreations)
      */
-    <C> void routeToLast(@Nonnull C context, @Nonnull Object viewParent);
+    void routeToLast(@Nonnull C context, @Nonnull Object viewParent);
 
     /**
      * Go back to the directly previous route
      * @param context The Android's context (required for Android)
      * @return true if go back is possible, false if is the end of navigation history
      */
-    <C> boolean back(@Nonnull C context);
+    boolean back(@Nonnull C context);
 
     /**
      * Navigate back n times
@@ -64,7 +64,7 @@ interface INaviganto<C> {
      * @param times The n times that we need to navigate backwards
      * @return true if go back n times is possible, false if is the end of navigation history
      */
-    <C> boolean backTimes(@Nonnull C context, @Nonnull Integer times);
+    boolean backTimes(@Nonnull C context, @Nonnull Integer times);
 
     /**
      * Navigate through the navigation history until find the route
@@ -72,7 +72,7 @@ interface INaviganto<C> {
      * @param route The route (params not needed) that we want to navigate back to
      * @return true if go back to this route is possible, false if it is not
      */
-    <C> boolean backTo(@Nonnull C context, @Nonnull Route route);
+    boolean backTo(@Nonnull C context, @Nonnull Route route);
 
     /**
      * Clear navigation history

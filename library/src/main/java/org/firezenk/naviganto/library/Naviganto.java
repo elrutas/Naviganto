@@ -56,7 +56,7 @@ public class Naviganto<C> implements INaviganto<C> {
         return INSTANCE;
     }
 
-    @Override @SuppressWarnings("unchecked") public <C> void routeTo(@Nonnull C context, @Nonnull Route route) {
+    @Override @SuppressWarnings("unchecked") public void routeTo(@Nonnull C context, @Nonnull Route route) {
         final Route prev = history.isEmpty() ? null : history.get(history.size() - 1).viewHistory.peek();
         try {
             if (prev == null || route.viewParent == null || !areRoutesEqual(prev, route)) {
@@ -91,18 +91,18 @@ public class Naviganto<C> implements INaviganto<C> {
         }
     }
 
-    @Override public <C> void routeToLast(@Nonnull C context) {
+    @Override public void routeToLast(@Nonnull C context) {
         routeTo(context, history.get(getHistoryLast()).viewHistory.pop());
     }
 
-    @Override public <C> void routeToLast(@Nonnull C context, @Nonnull Object viewParent) {
+    @Override public void routeToLast(@Nonnull C context, @Nonnull Object viewParent) {
         for (Route route : history.get(getHistoryLast()).viewHistory) {
             route.viewParent = viewParent;
         }
         routeTo(context, history.get(getHistoryLast()).viewHistory.pop());
     }
 
-    @Override public <C> boolean back(@Nonnull C context) {
+    @Override public boolean back(@Nonnull C context) {
         log(" <<--- Back");
         log(" History: ", history);
 
@@ -130,7 +130,7 @@ public class Naviganto<C> implements INaviganto<C> {
         return back(context);
     }
 
-    @Override public <C> boolean backTimes(@Nonnull C context, @Nonnull Integer times) {
+    @Override public boolean backTimes(@Nonnull C context, @Nonnull Integer times) {
         try {
             for (int i = 0; i < times; i++) {
                 if (!back(context)) {
@@ -146,7 +146,7 @@ public class Naviganto<C> implements INaviganto<C> {
         }
     }
 
-    @Override public <C> boolean backTo(@Nonnull C context, @Nonnull Route route) {
+    @Override public boolean backTo(@Nonnull C context, @Nonnull Route route) {
         if (history.isEmpty()) {
             print("Is not possible to go back, history is empty");
             return false;
@@ -219,7 +219,7 @@ public class Naviganto<C> implements INaviganto<C> {
         }
     }
 
-    private <C> void trackView(Route route, C context) {
+    private void trackView(Route route, C context) {
         if (VIEW_TRACKER != null && route != null) {
             String routeName = route.clazz.getSimpleName();
             String viewName = routeName.substring(0, routeName.lastIndexOf(RouteProcessor.CLASS_SUFFIX_ROUTE));

@@ -19,7 +19,7 @@ interface INaviganto<C> {
 
     /**
      * Set a consumer to read the route name when there is a route change
-     * @param routeTracker custom <string, C> consumer
+     * @param routeTracker custom consumer for feature name and context
      */
     void setViewTracker(BiConsumer<String, C> routeTracker);
 

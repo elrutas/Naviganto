@@ -17,12 +17,12 @@ import javax.annotation.Nonnull;
 public class Naviganto<C> implements INaviganto<C> {
 
     private static Consumer<String> LOGGING_READER = null;
-    private static Consumer<String> VIEW_TRACKER = null;
     private static Naviganto INSTANCE;
     private static Boolean DEBUG = Boolean.FALSE;
     private static String DEBUG_TAG = "Naviganto::";
 
     private ArrayList<ComplexRoute> history = new ArrayList<>();
+    private BiConsumer<String, C> VIEW_TRACKER = null;
 
     private class ComplexRoute {
 
@@ -47,7 +47,7 @@ public class Naviganto<C> implements INaviganto<C> {
         LOGGING_READER = loggingReader;
     }
 
-    @Override public void setViewTracker(Consumer<String> routeTracker) {
+    @Override public void setViewTracker(BiConsumer<String, C> routeTracker) {
         VIEW_TRACKER = routeTracker;
     }
 
@@ -63,7 +63,7 @@ public class Naviganto<C> implements INaviganto<C> {
 
                 log(" --->> Next");
                 log(" Navigating to: ", route);
-                trackView(route);
+                trackView(route, context);
 
                 if (route.bundle != null) {
                     ((Routable) route.clazz.newInstance()).route(context, route.uuid, route.bundle, route.viewParent);
@@ -119,9 +119,9 @@ public class Naviganto<C> implements INaviganto<C> {
             history.remove(getHistoryLast());
             if (!history.isEmpty()) {
                 if (history.get(getHistoryLast()).viewHistory != null && !history.get(getHistoryLast()).viewHistory.isEmpty()) {
-                    trackView(history.get(getHistoryLast()).viewHistory.getFirst());
+                    trackView(history.get(getHistoryLast()).viewHistory.getFirst(), context);
                 } else {
-                    trackView(history.get(getHistoryLast()).route);
+                    trackView(history.get(getHistoryLast()).route, context);
                 }
             }
             return false;
@@ -219,12 +219,12 @@ public class Naviganto<C> implements INaviganto<C> {
         }
     }
 
-    private void trackView(Route route) {
+    private <C> void trackView(Route route, C context) {
         if (VIEW_TRACKER != null && route != null) {
             String routeName = route.clazz.getSimpleName();
             String viewName = routeName.substring(0, routeName.lastIndexOf(RouteProcessor.CLASS_SUFFIX_ROUTE));
 
-            VIEW_TRACKER.accept(viewName);
+            VIEW_TRACKER.accept(viewName, context);
         }
     }
 
